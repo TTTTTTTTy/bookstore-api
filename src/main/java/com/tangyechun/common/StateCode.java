@@ -15,7 +15,9 @@ public enum StateCode {
     PARAMETER_VALUE_NOT_PROVIDE(100004, "Parameter cannot be null.", "参数不能为空"),
 
     USERNAME_EXISTS(200001, "username exists", "用户名已存在"),
-    EMAIL_EXISTS(200002, "email used", "邮箱已被占用");
+    EMAIL_EXISTS(200002, "email used", "邮箱已被占用"),
+
+    ISBN_NOT_FOUND(300001, "isbn not found", "未查询到该ISBN");
 
     private final int value;
     private final String reasonEnPhrase;

@@ -7,16 +7,31 @@ public class Book {
 
     private String isbn;
 
-    private Double price;
+    private String author;
+
+    private String price;
 
     private String category;
 
-    public Book(Integer id, String bookname, String isbn, Double price, String category) {
+    private String url;
+
+    private String image;
+
+    private Integer number;
+
+    private String summary;
+
+    public Book(Integer id, String bookname, String isbn, String author, String price, String category, String url, String image, Integer number, String summary) {
         this.id = id;
         this.bookname = bookname;
         this.isbn = isbn;
+        this.author = author;
         this.price = price;
         this.category = category;
+        this.url = url;
+        this.image = image;
+        this.number = number;
+        this.summary = summary;
     }
 
     public Book() {
@@ -47,12 +62,20 @@ public class Book {
         this.isbn = isbn == null ? null : isbn.trim();
     }
 
-    public Double getPrice() {
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author == null ? null : author.trim();
+    }
+
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setPrice(String price) {
+        this.price = price == null ? null : price.trim();
     }
 
     public String getCategory() {
@@ -61,5 +84,37 @@ public class Book {
 
     public void setCategory(String category) {
         this.category = category == null ? null : category.trim();
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url == null ? null : url.trim();
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image == null ? null : image.trim();
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary == null ? null : summary.trim();
     }
 }
