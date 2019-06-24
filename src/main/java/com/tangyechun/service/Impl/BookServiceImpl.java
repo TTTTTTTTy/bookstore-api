@@ -10,6 +10,7 @@ import com.tangyechun.mapper.UserBookMapper;
 import com.tangyechun.model.Book;
 import com.tangyechun.model.BookExample;
 import com.tangyechun.model.UserBook;
+import com.tangyechun.model.UserBookExample;
 import com.tangyechun.service.BookService;
 
 import org.slf4j.Logger;
@@ -157,5 +158,22 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book getBook(String isbn) {
         return null;
+    }
+
+    @Override
+    public List<UserBook> getUserBooks(String username) {
+        return userBookMapper.selectByUser(username);
+    }
+
+    @Override
+    public int updateUserBook(UserBook userBook) {
+        UserBookExample userBookExample = new UserBookExample();
+        userBookExample.createCriteria().andIdEqualTo(userBook.getId());
+        return userBookMapper.updateByExampleSelective(userBook, userBookExample);
+    }
+
+    @Override
+    public int deleteUserBook(Integer id) {
+        return userBookMapper.deleteByPrimaryKey(id);
     }
 }

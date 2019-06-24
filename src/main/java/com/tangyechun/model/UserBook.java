@@ -19,7 +19,9 @@ public class UserBook {
 
     private Date date;
 
-    public UserBook(Integer id, String username, Integer bookid, Boolean state, Double sellPrice, String description, String image, Date date) {
+    private String bookname;
+
+    public UserBook(Integer id, String username, Integer bookid, Boolean state, Double sellPrice, String description, String image, Date date, String bookname) {
         this.id = id;
         this.username = username;
         this.bookid = bookid;
@@ -28,6 +30,7 @@ public class UserBook {
         this.description = description;
         this.image = image;
         this.date = date;
+        this.bookname = bookname;
     }
 
     public UserBook() {
@@ -97,4 +100,13 @@ public class UserBook {
     public void setDate(Date date) {
         this.date = date;
     }
+
+    public String getBookname() {
+        return bookname;
+    }
+
+    public void setBookname(String bookname) {
+        this.bookname = bookname;
+    }
+
 }

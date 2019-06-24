@@ -18,6 +18,8 @@ public interface UserBookMapper {
 
     List<UserBook> selectByExample(UserBookExample example);
 
+    List<UserBook> selectByUser(String username);
+
     UserBook selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") UserBook record, @Param("example") UserBookExample example);
@@ -27,4 +29,5 @@ public interface UserBookMapper {
     int updateByPrimaryKeySelective(UserBook record);
 
     int updateByPrimaryKey(UserBook record);
+
 }

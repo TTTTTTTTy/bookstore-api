@@ -2,6 +2,9 @@ package com.tangyechun.service;
 
 import com.tangyechun.common.ServiceException;
 import com.tangyechun.model.Book;
+import com.tangyechun.model.UserBook;
+
+import java.util.List;
 
 /**
  * @author Administrator
@@ -16,5 +19,11 @@ public interface BookService {
     void addUserBook(String isbn, String username, double price, String description, String image);
 
     Book getBook(String isbn);
+
+    List<UserBook> getUserBooks(String username);
+
+    int updateUserBook(UserBook userBook);
+
+    int deleteUserBook(Integer id);
 
 }
