@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tangyechun.mapper.UserBookMapper">
+    <resultMap id="ResultMap" type="com.tangyechun.model.UserBook">
+        <constructor>
+            <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="username" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="bookId" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="state" javaType="java.lang.Boolean" jdbcType="BIT"/>
+            <arg column="sell_price" javaType="java.lang.Double" jdbcType="DOUBLE"/>
+            <arg column="description" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="image" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="date" javaType="java.util.Date" jdbcType="DATE"/>
+            <arg column="bookname" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        </constructor>
+    </resultMap>
+    <resultMap id="BaseResultMap" type="com.tangyechun.model.UserBook">
+        <constructor>
+            <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="username" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="bookId" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="state" javaType="java.lang.Boolean" jdbcType="BIT"/>
+            <arg column="sell_price" javaType="java.lang.Double" jdbcType="DOUBLE"/>
+            <arg column="description" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="image" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="date" javaType="java.util.Date" jdbcType="DATE"/>
+        </constructor>
+    </resultMap>
+
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    id, username, bookId, state, sell_price, description, image, date
+  </sql>
+    <select id="selectByExample" parameterType="com.tangyechun.model.UserBookExample" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        'false' as QUERYID,
+        <include refid="Base_Column_List"/>
+        from user_book
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByUser" parameterType="java.lang.String" resultMap="ResultMap">
+    select user_book.id, username, bookId, state, sell_price, description, user_book.image, date, bookname
+    FROM user_book, book
+    where user_book.bookId = book.id and username = #{username, jdbcType=VARCHAR}
+  </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_book
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user_book
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.tangyechun.model.UserBookExample">
+        delete from user_book
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.tangyechun.model.UserBook">
+    insert into user_book (id, username, bookId, 
+      state, sell_price, description, 
+      image, date)
+    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{bookid,jdbcType=INTEGER}, 
+      #{state,jdbcType=BIT}, #{sellPrice,jdbcType=DOUBLE}, #{description,jdbcType=VARCHAR}, 
+      #{image,jdbcType=VARCHAR}, #{date,jdbcType=DATE})
+  </insert>
+    <insert id="insertSelective" parameterType="com.tangyechun.model.UserBook">
+        insert into user_book
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="username != null">
+                username,
+            </if>
+            <if test="bookid != null">
+                bookId,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+            <if test="sellPrice != null">
+                sell_price,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="image != null">
+                image,
+            </if>
+            <if test="date != null">
+                date,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="bookid != null">
+                #{bookid,jdbcType=INTEGER},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=BIT},
+            </if>
+            <if test="sellPrice != null">
+                #{sellPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="image != null">
+                #{image,jdbcType=VARCHAR},
+            </if>
+            <if test="date != null">
+                #{date,jdbcType=DATE},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.tangyechun.model.UserBookExample" resultType="java.lang.Long">
+        select count(*) from user_book
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update user_book
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.username != null">
+                username = #{record.username,jdbcType=VARCHAR},
+            </if>
+            <if test="record.bookid != null">
+                bookId = #{record.bookid,jdbcType=INTEGER},
+            </if>
+            <if test="record.state != null">
+                state = #{record.state,jdbcType=BIT},
+            </if>
+            <if test="record.sellPrice != null">
+                sell_price = #{record.sellPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="record.description != null">
+                description = #{record.description,jdbcType=VARCHAR},
+            </if>
+            <if test="record.image != null">
+                image = #{record.image,jdbcType=VARCHAR},
+            </if>
+            <if test="record.date != null">
+                date = #{record.date,jdbcType=DATE},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update user_book
+        set id = #{record.id,jdbcType=INTEGER},
+        username = #{record.username,jdbcType=VARCHAR},
+        bookId = #{record.bookid,jdbcType=INTEGER},
+        state = #{record.state,jdbcType=BIT},
+        sell_price = #{record.sellPrice,jdbcType=DOUBLE},
+        description = #{record.description,jdbcType=VARCHAR},
+        image = #{record.image,jdbcType=VARCHAR},
+        date = #{record.date,jdbcType=DATE}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.tangyechun.model.UserBook">
+        update user_book
+        <set>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="bookid != null">
+                bookId = #{bookid,jdbcType=INTEGER},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=BIT},
+            </if>
+            <if test="sellPrice != null">
+                sell_price = #{sellPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="image != null">
+                image = #{image,jdbcType=VARCHAR},
+            </if>
+            <if test="date != null">
+                date = #{date,jdbcType=DATE},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.tangyechun.model.UserBook">
+    update user_book
+    set username = #{username,jdbcType=VARCHAR},
+      bookId = #{bookid,jdbcType=INTEGER},
+      state = #{state,jdbcType=BIT},
+      sell_price = #{sellPrice,jdbcType=DOUBLE},
+      description = #{description,jdbcType=VARCHAR},
+      image = #{image,jdbcType=VARCHAR},
+      date = #{date,jdbcType=DATE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
