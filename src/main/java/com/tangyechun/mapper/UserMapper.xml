@@ -9,6 +9,7 @@
       <arg column="email" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="phone" javaType="java.lang.String" jdbcType="CHAR" />
       <arg column="realname" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="qq" javaType="java.lang.String" jdbcType="VARCHAR"/>
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -70,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, username, password, email, phone, realname
+    id, username, password, email, phone, realname, qq
   </sql>
   <select id="selectByExample" parameterType="com.tangyechun.model.UserExample" resultMap="BaseResultMap">
     select
@@ -95,11 +96,11 @@
   </delete>
   <insert id="insert" parameterType="com.tangyechun.model.User">
     insert into user (id, username, password, 
-      email, phone, realname
-      )
+      email, phone, realname, 
+      qq)
     values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{email,jdbcType=VARCHAR}, #{phone,jdbcType=CHAR}, #{realname,jdbcType=VARCHAR}
-      )
+      #{email,jdbcType=VARCHAR}, #{phone,jdbcType=CHAR}, #{realname,jdbcType=VARCHAR}, 
+      #{qq,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.tangyechun.model.User">
     insert into user
@@ -122,6 +123,9 @@
       <if test="realname != null">
         realname,
       </if>
+      <if test="qq != null">
+        qq,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -141,6 +145,9 @@
       </if>
       <if test="realname != null">
         #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null">
+        #{qq,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -171,6 +178,9 @@
       <if test="record.realname != null">
         realname = #{record.realname,jdbcType=VARCHAR},
       </if>
+      <if test="record.qq != null">
+        qq = #{record.qq,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -183,7 +193,8 @@
       password = #{record.password,jdbcType=VARCHAR},
       email = #{record.email,jdbcType=VARCHAR},
       phone = #{record.phone,jdbcType=CHAR},
-      realname = #{record.realname,jdbcType=VARCHAR}
+    realname = #{record.realname,jdbcType=VARCHAR},
+    qq = #{record.qq,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

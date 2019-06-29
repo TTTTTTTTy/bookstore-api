@@ -21,7 +21,9 @@ public class Book {
 
     private String summary;
 
-    public Book(Integer id, String bookname, String isbn, String author, String price, String category, String url, String image, Integer number, String summary) {
+    private Byte kind;
+
+    public Book(Integer id, String bookname, String isbn, String author, String price, String category, String url, String image, Integer number, String summary, Byte kind) {
         this.id = id;
         this.bookname = bookname;
         this.isbn = isbn;
@@ -32,6 +34,7 @@ public class Book {
         this.image = image;
         this.number = number;
         this.summary = summary;
+        this.kind = kind;
     }
 
     public Book() {
@@ -116,5 +119,13 @@ public class Book {
 
     public void setSummary(String summary) {
         this.summary = summary == null ? null : summary.trim();
+    }
+
+    public Byte getKind() {
+        return kind;
+    }
+
+    public void setKind(Byte kind) {
+        this.kind = kind;
     }
 }

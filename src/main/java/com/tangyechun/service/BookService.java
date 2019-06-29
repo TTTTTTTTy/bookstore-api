@@ -18,9 +18,19 @@ public interface BookService {
 
     void addUserBook(String isbn, String username, double price, String description, String image);
 
-    Book getBook(String isbn);
+    int updateBook(Book book);
+
+    Book getBook(Integer id);
+
+    List<Book> getBookLike(String bookName);
+
+    List<Book> getBooks(int kind);
 
     List<UserBook> getUserBooks(String username);
+
+    List<UserBook> getUserBooks(Integer bookId);
+
+    UserBook getUserBook(Integer id);
 
     int updateUserBook(UserBook userBook);
 

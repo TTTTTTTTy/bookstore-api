@@ -18,6 +18,10 @@ public interface OrderMapper {
 
     List<Order> selectByExample(OrderExample example);
 
+    List<Order> selectByBuyer(String buyerName);
+
+    List<Order> selectBySeller(String sellerName);
+
     Order selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") Order record, @Param("example") OrderExample example);

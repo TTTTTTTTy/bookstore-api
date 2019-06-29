@@ -4,7 +4,7 @@ package com.tangyechun.common;
  * @author Administrator
  * @since 2019/6/21 23:56
  */
-public class ServiceException extends Exception {
+public class ServiceException extends RuntimeException {
 
     private int errorCode;
 

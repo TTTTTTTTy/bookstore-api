@@ -20,13 +20,16 @@ public class User implements UserDetails {
 
     private String realname;
 
-    public User(Integer id, String username, String password, String email, String phone, String realname) {
+    private String qq;
+
+    public User(Integer id, String username, String password, String email, String phone, String realname, String qq) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
         this.phone = phone;
         this.realname = realname;
+        this.qq = qq;
     }
 
     public User() {
@@ -109,5 +112,13 @@ public class User implements UserDetails {
 
     public void setRealname(String realname) {
         this.realname = realname == null ? null : realname.trim();
+    }
+
+    public String getQq() {
+        return qq;
+    }
+
+    public void setQq(String qq) {
+        this.qq = qq;
     }
 }

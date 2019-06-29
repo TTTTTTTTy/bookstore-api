@@ -4,10 +4,34 @@
   <resultMap id="BaseResultMap" type="com.tangyechun.model.Order">
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="user_book_id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+      <arg column="bookname" javaType="java.lang.String" jdbcType="VARCHAR"/>
+      <arg column="buyer_name" javaType="java.lang.String" jdbcType="VARCHAR"/>
+      <arg column="seller_name" javaType="java.lang.String" jdbcType="VARCHAR"/>
+      <arg column="phone" javaType="java.lang.String" jdbcType="CHAR"/>
+      <arg column="price" javaType="java.lang.Double" jdbcType="DOUBLE"/>
+      <arg column="mode" javaType="java.lang.Boolean" jdbcType="BIT"/>
       <arg column="state" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="create_date" javaType="java.util.Date" jdbcType="DATE"/>
+      <arg column="finish_date" javaType="java.util.Date" jdbcType="DATE"/>
+      <arg column="address" javaType="java.lang.String" jdbcType="VARCHAR"/>
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMap" type="com.tangyechun.model.Order">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
       <arg column="user_book_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="buyer_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="delivery" javaType="java.lang.Boolean" jdbcType="BIT" />
+      <arg column="bookname" javaType="java.lang.String" jdbcType="VARCHAR"/>
+      <arg column="buyer_name" javaType="java.lang.String" jdbcType="VARCHAR"/>
+      <arg column="seller_name" javaType="java.lang.String" jdbcType="VARCHAR"/>
+      <arg column="phone" javaType="java.lang.String" jdbcType="CHAR"/>
+      <arg column="price" javaType="java.lang.Double" jdbcType="DOUBLE"/>
+      <arg column="mode" javaType="java.lang.Boolean" jdbcType="BIT"/>
+      <arg column="state" javaType="java.lang.Byte" jdbcType="TINYINT"/>
+      <arg column="create_date" javaType="java.util.Date" jdbcType="DATE"/>
+      <arg column="finish_date" javaType="java.util.Date" jdbcType="DATE"/>
+      <arg column="address" javaType="java.lang.String" jdbcType="VARCHAR"/>
+      <arg column="qq" javaType="java.lang.String" jdbcType="VARCHAR"/>
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -69,7 +93,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, state, user_book_id, buyer_id, delivery
+    id, user_book_id, bookname, buyer_name, seller_name, phone, price, mode, state, create_date, 
+    finish_date, address
   </sql>
   <select id="selectByExample" parameterType="com.tangyechun.model.OrderExample" resultMap="BaseResultMap">
     select
@@ -78,7 +103,7 @@
     </if>
     'false' as QUERYID,
     <include refid="Base_Column_List" />
-    from order
+    from order_table
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -86,88 +111,167 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByBuyer" parameterType="java.lang.String" resultMap="ResultMap">
+        select order_table.id, user_book_id, bookname, buyer_name, seller_name, order_table.phone, price, mode, state, create_date,
+        finish_date, address, qq
+        FROM order_table, user
+        where order_table.buyer_name = #{buyerName, jdbcType=VARCHAR} and order_table.seller_name = user.username
+   </select>
+  <select id="selectBySeller" parameterType="java.lang.String" resultMap="ResultMap">
+        select order_table.id, user_book_id, bookname, buyer_name, seller_name, order_table.phone, price, mode, state, create_date,
+        finish_date, address, qq
+        FROM order_table, user
+        where order_table.seller_name = #{sellerName, jdbcType=VARCHAR} and order_table.buyer_name = user.username
+   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from order
+    from order_table
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from order
+    delete from order_table
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.tangyechun.model.OrderExample">
-    delete from order
+    delete from order_table
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.tangyechun.model.Order">
-    insert into order (id, state, user_book_id, 
-      buyer_id, delivery)
-    values (#{id,jdbcType=INTEGER}, #{state,jdbcType=TINYINT}, #{userBookId,jdbcType=INTEGER}, 
-      #{buyerId,jdbcType=INTEGER}, #{delivery,jdbcType=BIT})
+    insert into order_table (id, user_book_id, bookname, 
+      buyer_name, seller_name, phone, 
+      price, mode, state, create_date, 
+      finish_date, address)
+    values (#{id,jdbcType=INTEGER}, #{userBookId,jdbcType=INTEGER}, #{bookname,jdbcType=VARCHAR}, 
+      #{buyerName,jdbcType=VARCHAR}, #{sellerName,jdbcType=VARCHAR}, #{phone,jdbcType=CHAR}, 
+      #{price,jdbcType=DOUBLE}, #{mode,jdbcType=BIT}, #{state,jdbcType=TINYINT}, #{createDate,jdbcType=DATE}, 
+      #{finishDate,jdbcType=DATE}, #{address,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.tangyechun.model.Order">
-    insert into order
+    insert into order_table
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="state != null">
-        state,
-      </if>
       <if test="userBookId != null">
         user_book_id,
       </if>
-      <if test="buyerId != null">
-        buyer_id,
+      <if test="bookname != null">
+        bookname,
       </if>
-      <if test="delivery != null">
-        delivery,
+      <if test="buyerName != null">
+        buyer_name,
+      </if>
+      <if test="sellerName != null">
+        seller_name,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="mode != null">
+        mode,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="finishDate != null">
+        finish_date,
+      </if>
+      <if test="address != null">
+        address,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="state != null">
-        #{state,jdbcType=TINYINT},
-      </if>
       <if test="userBookId != null">
         #{userBookId,jdbcType=INTEGER},
       </if>
-      <if test="buyerId != null">
-        #{buyerId,jdbcType=INTEGER},
+      <if test="bookname != null">
+        #{bookname,jdbcType=VARCHAR},
       </if>
-      <if test="delivery != null">
-        #{delivery,jdbcType=BIT},
+      <if test="buyerName != null">
+        #{buyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="sellerName != null">
+        #{sellerName,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=CHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="mode != null">
+        #{mode,jdbcType=BIT},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=TINYINT},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=DATE},
+      </if>
+      <if test="finishDate != null">
+        #{finishDate,jdbcType=DATE},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.tangyechun.model.OrderExample" resultType="java.lang.Long">
-    select count(*) from order
+    select count(*) from order_table
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update order
+    update order_table
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.state != null">
-        state = #{record.state,jdbcType=TINYINT},
-      </if>
       <if test="record.userBookId != null">
         user_book_id = #{record.userBookId,jdbcType=INTEGER},
       </if>
-      <if test="record.buyerId != null">
-        buyer_id = #{record.buyerId,jdbcType=INTEGER},
+      <if test="record.bookname != null">
+        bookname = #{record.bookname,jdbcType=VARCHAR},
       </if>
-      <if test="record.delivery != null">
-        delivery = #{record.delivery,jdbcType=BIT},
+      <if test="record.buyerName != null">
+        buyer_name = #{record.buyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sellerName != null">
+        seller_name = #{record.sellerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phone != null">
+        phone = #{record.phone,jdbcType=CHAR},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=DOUBLE},
+      </if>
+      <if test="record.mode != null">
+        mode = #{record.mode,jdbcType=BIT},
+      </if>
+      <if test="record.state != null">
+        state = #{record.state,jdbcType=TINYINT},
+      </if>
+      <if test="record.createDate != null">
+        create_date = #{record.createDate,jdbcType=DATE},
+      </if>
+      <if test="record.finishDate != null">
+        finish_date = #{record.finishDate,jdbcType=DATE},
+      </if>
+      <if test="record.address != null">
+        address = #{record.address,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -175,40 +279,75 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update order
+    update order_table
     set id = #{record.id,jdbcType=INTEGER},
-      state = #{record.state,jdbcType=TINYINT},
       user_book_id = #{record.userBookId,jdbcType=INTEGER},
-      buyer_id = #{record.buyerId,jdbcType=INTEGER},
-      delivery = #{record.delivery,jdbcType=BIT}
+    bookname = #{record.bookname,jdbcType=VARCHAR},
+    buyer_name = #{record.buyerName,jdbcType=VARCHAR},
+    seller_name = #{record.sellerName,jdbcType=VARCHAR},
+    phone = #{record.phone,jdbcType=CHAR},
+    price = #{record.price,jdbcType=DOUBLE},
+    mode = #{record.mode,jdbcType=BIT},
+    state = #{record.state,jdbcType=TINYINT},
+    create_date = #{record.createDate,jdbcType=DATE},
+    finish_date = #{record.finishDate,jdbcType=DATE},
+    address = #{record.address,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.tangyechun.model.Order">
-    update order
+    update order_table
     <set>
-      <if test="state != null">
-        state = #{state,jdbcType=TINYINT},
-      </if>
       <if test="userBookId != null">
         user_book_id = #{userBookId,jdbcType=INTEGER},
       </if>
-      <if test="buyerId != null">
-        buyer_id = #{buyerId,jdbcType=INTEGER},
+      <if test="bookname != null">
+        bookname = #{bookname,jdbcType=VARCHAR},
       </if>
-      <if test="delivery != null">
-        delivery = #{delivery,jdbcType=BIT},
+      <if test="buyerName != null">
+        buyer_name = #{buyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="sellerName != null">
+        seller_name = #{sellerName,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=CHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="mode != null">
+        mode = #{mode,jdbcType=BIT},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=TINYINT},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=DATE},
+      </if>
+      <if test="finishDate != null">
+        finish_date = #{finishDate,jdbcType=DATE},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.tangyechun.model.Order">
-    update order
-    set state = #{state,jdbcType=TINYINT},
-      user_book_id = #{userBookId,jdbcType=INTEGER},
-      buyer_id = #{buyerId,jdbcType=INTEGER},
-      delivery = #{delivery,jdbcType=BIT}
+    update order_table
+    set user_book_id = #{userBookId,jdbcType=INTEGER},
+      bookname = #{bookname,jdbcType=VARCHAR},
+      buyer_name = #{buyerName,jdbcType=VARCHAR},
+      seller_name = #{sellerName,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=CHAR},
+      price = #{price,jdbcType=DOUBLE},
+      mode = #{mode,jdbcType=BIT},
+      state = #{state,jdbcType=TINYINT},
+      create_date = #{createDate,jdbcType=DATE},
+      finish_date = #{finishDate,jdbcType=DATE},
+      address = #{address,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

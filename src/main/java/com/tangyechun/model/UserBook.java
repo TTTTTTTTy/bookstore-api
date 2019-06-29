@@ -21,6 +21,19 @@ public class UserBook {
 
     private String bookname;
 
+    private String qq;
+
+    public UserBook(Integer id, String username, Integer bookid, Boolean state, Double sellPrice, String description, String image, Date date) {
+        this.id = id;
+        this.username = username;
+        this.bookid = bookid;
+        this.state = state;
+        this.sellPrice = sellPrice;
+        this.description = description;
+        this.image = image;
+        this.date = date;
+    }
+
     public UserBook(Integer id, String username, Integer bookid, Boolean state, Double sellPrice, String description, String image, Date date, String bookname) {
         this.id = id;
         this.username = username;
@@ -31,6 +44,18 @@ public class UserBook {
         this.image = image;
         this.date = date;
         this.bookname = bookname;
+    }
+
+    public UserBook(Integer id, String username, Integer bookid, Boolean state, Double sellPrice, String description, String image, String qq, Date date) {
+        this.id = id;
+        this.username = username;
+        this.bookid = bookid;
+        this.state = state;
+        this.sellPrice = sellPrice;
+        this.description = description;
+        this.image = image;
+        this.date = date;
+        this.qq = qq;
     }
 
     public UserBook() {
@@ -109,4 +134,11 @@ public class UserBook {
         this.bookname = bookname;
     }
 
+    public String getQq() {
+        return qq;
+    }
+
+    public void setQq(String qq) {
+        this.qq = qq;
+    }
 }

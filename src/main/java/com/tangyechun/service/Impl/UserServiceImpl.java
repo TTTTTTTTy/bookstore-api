@@ -46,8 +46,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             return StateCode.EMAIL_EXISTS.value();
         }
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        userMapper.insert(user);
+        userMapper.insertSelective(user);
         return StateCode.SUCCESS.value();
+    }
+
+    @Override
+    public int setQq(String username, String qq) {
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andUsernameEqualTo(username);
+        User user = new User();
+        user.setQq(qq);
+        return userMapper.updateByExampleSelective(user, userExample);
     }
 
     @Override

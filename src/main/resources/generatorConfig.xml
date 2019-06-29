@@ -43,9 +43,9 @@
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
         <!--生成对应表及类名-->
-        <table tableName="user_book"
-               domainObjectName="UserBook"
-               mapperName="UserBookMapper"
+        <table tableName="order_table"
+               domainObjectName="Order"
+               mapperName="OrderMapper"
                selectByExampleQueryId="false">
         </table>
     </context>

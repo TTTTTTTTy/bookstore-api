@@ -113,13 +113,14 @@ public class BookServiceImpl implements BookService {
                 }
             }
             book.setCategory(sb.toString());
+            book.setKind((byte) category);
             book.setNumber(1);
             bookMapper.insert(book);
         } else {
             book = books.get(0);
             String[] olds = book.getCategory().split(",");
             int oldMax = Integer.parseInt(olds[Integer.parseInt(olds[0]) + 1]);
-            int add = Integer.parseInt(olds[category + 1] + 1);
+            int add = Integer.parseInt(olds[category + 1]) + 1;
             String max = (oldMax >= add) ? olds[0] : String.valueOf(category);
             StringBuilder newCategory = new StringBuilder();
             newCategory.append(max);
@@ -132,6 +133,7 @@ public class BookServiceImpl implements BookService {
                 }
             }
             book.setCategory(newCategory.toString());
+            book.setKind(Byte.valueOf(max));
             book.setNumber(book.getNumber() + 1);
             bookMapper.updateByExampleSelective(book, bookExample);
         }
@@ -154,15 +156,44 @@ public class BookServiceImpl implements BookService {
         userBookMapper.insert(userBook);
     }
 
+    @Override
+    public int updateBook(Book book) {
+        return bookMapper.updateByPrimaryKeySelective(book);
+    }
 
     @Override
-    public Book getBook(String isbn) {
-        return null;
+    public Book getBook(Integer id) {
+        return bookMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public List<Book> getBookLike(String bookName) {
+        BookExample bookExample = new BookExample();
+        bookExample.createCriteria().andBooknameLike("%" + bookName + "%");
+        return bookMapper.selectByExample(bookExample);
+    }
+
+
+    @Override
+    public List<Book> getBooks(int kind) {
+        BookExample bookExample = new BookExample();
+        bookExample.createCriteria().andKindEqualTo((byte) kind).andNumberNotEqualTo(0);
+        return bookMapper.selectByExample(bookExample);
     }
 
     @Override
     public List<UserBook> getUserBooks(String username) {
         return userBookMapper.selectByUser(username);
+    }
+
+    @Override
+    public List<UserBook> getUserBooks(Integer bookId) {
+        return userBookMapper.selectWithQq(bookId);
+    }
+
+    @Override
+    public UserBook getUserBook(Integer id) {
+        return userBookMapper.selectByPrimaryKey(id);
     }
 
     @Override
@@ -174,6 +205,14 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public int deleteUserBook(Integer id) {
+        UserBook userBook = userBookMapper.selectByPrimaryKey(id);
+        Book book = bookMapper.selectByPrimaryKey(userBook.getBookid());
+        if (book.getNumber() > 0) {
+            book.setNumber(book.getNumber() - 1);
+            BookExample bookExample = new BookExample();
+            bookExample.createCriteria().andIdEqualTo(book.getId());
+            bookMapper.updateByExampleSelective(book, bookExample);
+        }
         return userBookMapper.deleteByPrimaryKey(id);
     }
 }

@@ -17,7 +17,9 @@ public enum StateCode {
     USERNAME_EXISTS(200001, "username exists", "用户名已存在"),
     EMAIL_EXISTS(200002, "email used", "邮箱已被占用"),
 
-    ISBN_NOT_FOUND(300001, "isbn not found", "未查询到该ISBN");
+    ISBN_NOT_FOUND(300001, "isbn not found", "未查询到该ISBN"),
+
+    BOOK_SOLD_OUT(400001, "This book has been sold out.", "该书籍已被购买");
 
     private final int value;
     private final String reasonEnPhrase;

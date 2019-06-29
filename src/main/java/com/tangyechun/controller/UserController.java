@@ -6,7 +6,6 @@ import com.tangyechun.model.User;
 import com.tangyechun.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,6 +30,16 @@ public class UserController {
         }
         else{
             return RespBean.error("注册失败！" + StateCode.valueOf(code).getReasonChPhrase());
+        }
+    }
+
+    @PostMapping("/qq")
+    @ResponseBody
+    public RespBean setQq(String username, String qq) {
+        if (userService.setQq(username, qq) == 1) {
+            return RespBean.ok("设置成功!");
+        } else {
+            return RespBean.error("设置失败！“");
         }
     }
 

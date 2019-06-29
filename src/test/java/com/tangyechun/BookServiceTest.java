@@ -1,6 +1,7 @@
 package com.tangyechun;
 
 import com.tangyechun.common.ServiceException;
+import com.tangyechun.model.Book;
 import com.tangyechun.model.UserBook;
 import com.tangyechun.service.BookService;
 import org.junit.Test;
@@ -48,5 +49,19 @@ public class BookServiceTest {
         List<UserBook> userBookList = bookService.getUserBooks("admin");
         System.err.println(userBookList.size());
     }
+
+    @Test
+    public void getBooks() {
+        List<Book> bookList = bookService.getBooks(10);
+        System.err.println(bookList.size());
+    }
+
+    @Test
+    public void getBookLike() {
+        List<Book> bookList = bookService.getBookLike("Spring Boot");
+        System.err.println(bookList.size());
+    }
+
+
 
 }

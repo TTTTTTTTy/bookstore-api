@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,6 +41,33 @@ public class BookController {
                 return RespBean.error(StateCode.UNKNOWN.getReasonChPhrase());
             }
         }
+    }
+
+    @RequestMapping(value = "/searchLike", method = RequestMethod.GET)
+    @ResponseBody
+    public RespBean getBookLike(@RequestParam String bookName) {
+        List<Book> book = bookService.getBookLike(bookName);
+        if (book == null || book.size() == 0) {
+            return RespBean.error("未查询到相关书籍", null);
+        }
+        return RespBean.ok("查询成功", book);
+    }
+
+    @RequestMapping(value = "/category/{kind}", method = RequestMethod.GET)
+    @ResponseBody
+    public RespBean getBook(@PathVariable(value = "kind") Integer kind) {
+        List<Book> bookList = bookService.getBooks(kind);
+        return RespBean.ok("查询成功", bookList);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public RespBean getBookInfo(@PathVariable(value = "id") Integer id) {
+        Book book = bookService.getBook(id);
+        if (book == null) {
+            return RespBean.error("该id不存在");
+        }
+        return RespBean.ok("查询成功", book);
     }
 
     @PostMapping("/add")
@@ -74,6 +102,21 @@ public class BookController {
     @ResponseBody
     public List<UserBook> getUserBook(@PathVariable(value = "username") String username) {
         return bookService.getUserBooks(username);
+    }
+
+    @RequestMapping(value = "/userbook/book/{bookId}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<UserBook> getUserBook(@PathVariable(value = "bookId") Integer bookId) {
+        return bookService.getUserBooks(bookId);
+    }
+
+    @RequestMapping(value = "/userbook/get/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<UserBook> getUserBookByID(@PathVariable(value = "id") Integer id) {
+        UserBook userBook = bookService.getUserBook(id);
+        List<UserBook> userBookList = new ArrayList<>();
+        userBookList.add(userBook);
+        return userBookList;
     }
 
     @RequestMapping(value = "/userbook/{id}", method = RequestMethod.DELETE)
